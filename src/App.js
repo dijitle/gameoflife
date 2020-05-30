@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import LifeGrid from "./components/LifeGrid";
@@ -8,35 +8,40 @@ function App() {
   const maxZoom = 256;
 
   const [zoom, setZoom] = useState(minZoom);
+  const [isPlaying, setIsPlaying] = useState(null);
 
   let emptyGrid = [];
+  let gridSize = 8;
 
-  for (let i = 0; i < 8; i++) {
-    let row = [];
-    for (let j = 0; j < 8; j++) {
-      row.push(0);
-    }
-    emptyGrid.push(row);
+  let row = [];
+  for (let j = 0; j < gridSize; j++) {
+    row.push(false);
+  }
+  for (let i = 0; i < gridSize; i++) {
+    emptyGrid.push([...row]);
   }
 
   const [gameGrid, setGameGrid] = useState(emptyGrid);
 
   const toggleLife = (row, col) => {
-    let newGrid = gameGrid.map((arr) => arr.slice());
+    let newGrid = [...gameGrid];
 
-    newGrid[row][col] = gameGrid[row][col] === 0 ? 1 : 0;
+    newGrid[row][col] = gameGrid[row][col] ? false : true;
 
     setGameGrid(newGrid);
   };
 
-  const nextGeneration = () => {
-    let prev = gameGrid;
+  const playPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const nextGeneration = (prev) => {
     let newGrid = prev.map((arr) => {
       return arr.slice();
     });
 
-    for (let row = 0; row < 8; row++) {
-      for (let col = 0; col < 8; col++) {
+    for (let row = 0; row < gridSize; row++) {
+      for (let col = 0; col < gridSize; col++) {
         let livingNeighbors =
           ((prev[row - 1] || 0)[col - 1] || 0) +
           ((prev[row - 1] || 0)[col] || 0) +
@@ -48,14 +53,14 @@ function App() {
           ((prev[row + 1] || 0)[col + 1] || 0);
 
         if (livingNeighbors === 3) {
-          newGrid[row][col] = 1;
+          newGrid[row][col] = true;
         } else if (livingNeighbors < 2 || livingNeighbors > 3) {
-          newGrid[row][col] = 0;
+          newGrid[row][col] = false;
         }
       }
     }
 
-    setGameGrid(newGrid);
+    return newGrid;
   };
 
   const zoomIn = () => {
@@ -66,12 +71,24 @@ function App() {
     setZoom(zoom * 2);
   };
 
+  useEffect(() => {
+    if (isPlaying) {
+      let id = setInterval(
+        () => setGameGrid((prev) => nextGeneration(prev)),
+        1000
+      );
+      return () => clearInterval(id);
+    }
+  }, [isPlaying]);
+
   return (
     <div className="App">
       <Header
         zoomIn={zoomIn}
         zoomOut={zoomOut}
-        next={nextGeneration}
+        next={() => setGameGrid((prev) => nextGeneration(prev))}
+        isPlaying={isPlaying}
+        playPause={playPause}
         canZoomIn={zoom > minZoom}
         canZoomOut={zoom < maxZoom}
       ></Header>

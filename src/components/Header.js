@@ -6,6 +6,10 @@ function Header(props) {
   return (
     <Navbar bg="dark" variant="dark">
       Conway's Game of Life
+      <Button onClick={props.playPause}>
+        {" "}
+        {props.isPlaying ? "Pause" : "Play"}{" "}
+      </Button>
       <Button onClick={props.next}> Next </Button>
       <Button onClick={props.zoomIn} disabled={!props.canZoomIn}>
         {" "}
