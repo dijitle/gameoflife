@@ -11,7 +11,7 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(null);
 
   let emptyGrid = [];
-  let gridSize = 8;
+  let gridSize = 512;
 
   let row = [];
   for (let j = 0; j < gridSize; j++) {
@@ -75,7 +75,7 @@ function App() {
     if (isPlaying) {
       let id = setInterval(
         () => setGameGrid((prev) => nextGeneration(prev)),
-        1000
+        100
       );
       return () => clearInterval(id);
     }
