@@ -1,0 +1,15 @@
+.tile {
+  border: 1px solid black;
+}
+
+.alive {
+  background-color: black;
+}
+
+.dead {
+  background-color: white;
+}
+
+.tile:hover {
+  box-shadow: 0 0 21px blue inset;
+}

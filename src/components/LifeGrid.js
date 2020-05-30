@@ -9,12 +9,24 @@ function LifeGrid(props) {
   const [tileSize, setTileSize] = useState(0);
 
   useEffect(() => {
-    setTileSize(Math.min(gridSize.height, gridSize.width) / props.zoomLevel);
+    setTileSize(
+      Math.min(Math.min(gridSize.height, gridSize.width) / props.zoomLevel),
+      1
+    );
   }, [gridSize, props.zoomLevel]);
 
   return (
-    <div ref={ref} className="grid d-flex">
-      <LifeTile size={tileSize}></LifeTile>
+    <div ref={ref} className="grid">
+      {props.gameGrid.map((row, i) =>
+        row.map((col, j) => (
+          <LifeTile
+            key={i * 10000 + j}
+            size={tileSize}
+            state={col}
+            toggle={() => props.toggleLife(i, j)}
+          ></LifeTile>
+        ))
+      )}
     </div>
   );
 }
