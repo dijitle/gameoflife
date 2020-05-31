@@ -1,6 +1,6 @@
 .grid {
   height: calc(100% - 50px);
-  background-color: gray;
+  background-color: black;
   cursor: crosshair;
 }
 
