@@ -1,4 +1,32 @@
 .grid {
-  height: calc(100% - 60px);
+  height: calc(100% - 50px);
   background-color: gray;
+  cursor: crosshair;
+}
+
+.navBarTitle {
+  margin-right: auto !important;
+}
+
+.navBarFlex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 5px 15px;
+  background-color: #080808;
+}
+
+@media only screen and (max-width: 600px) {
+  .grid {
+    height: calc(100% - 88px);
+  }
+  .navBarTitle {
+    width: 100%;
+  }
+
+  .navBarFlex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }

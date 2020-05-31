@@ -9,6 +9,7 @@ function App() {
 
   const [zoom, setZoom] = useState(minZoom);
   const [isPlaying, setIsPlaying] = useState(null);
+  const [bringLife, setBringLife] = useState(true);
 
   let emptyGrid = [];
   let gridSize = 512;
@@ -26,9 +27,10 @@ function App() {
   const toggleLife = (row, col) => {
     let newGrid = [...gameGrid];
 
-    newGrid[row][col] = gameGrid[row][col] ? false : true;
-
-    setGameGrid(newGrid);
+    if (newGrid[row][col] !== bringLife) {
+      newGrid[row][col] = bringLife;
+      setGameGrid(newGrid);
+    }
   };
 
   const playPause = () => {
@@ -91,6 +93,9 @@ function App() {
         playPause={playPause}
         canZoomIn={zoom > minZoom}
         canZoomOut={zoom < maxZoom}
+        clear={() => setGameGrid(emptyGrid)}
+        bringLife={bringLife}
+        setBringLife={() => setBringLife(!bringLife)}
       ></Header>
       <LifeGrid
         zoomLevel={zoom}
